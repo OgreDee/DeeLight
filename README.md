@@ -18,5 +18,5 @@
 3. Blinn-Phong模型
 > ![image](https://github.com/OgreDee/DeeLight/blob/master/Pic/Blinn_Phong%20Model.png)
 
-#油腻腻的效果图
-![image](https://github.com/OgreDee/DeeLight/blob/master/Pic/Blinn-Phong.png)
+# 油腻腻的效果图
+> ![image](https://github.com/OgreDee/DeeLight/blob/master/Pic/Blinn-Phong.png)
