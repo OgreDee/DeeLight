@@ -5,6 +5,8 @@ Shader "Dee/LambertDiffuse VertLit"
 {
 	Properties
 	{
+        [Toggle] _HalfLambert ("HalfLambert", Float) = 0
+    
         _DiffuseColor("Diffuse Color", Color) = (1,1,1,1)
 	}
 	SubShader
@@ -15,6 +17,9 @@ Shader "Dee/LambertDiffuse VertLit"
 		Pass
 		{
 			CGPROGRAM
+            
+            #pragma shader_feature _HALFLAMBERT_ON
+            
 			#pragma vertex vert
 			#pragma fragment frag
 			
@@ -44,7 +49,14 @@ Shader "Dee/LambertDiffuse VertLit"
                 float3 worldNormal = mul((float3x3)unity_ObjectToWorld,v.normal);
                 float3 normalDir = normalize(worldNormal); 
                 
-                float dotV = saturate(dot(lightDir, normalDir));
+                float dotV = dot(lightDir, normalDir);
+                
+                #if _HALFLAMBERT_ON
+                dotV = dotV * 0.5 + 0.5;
+                #else
+                dotV = saturate(dotV);
+                #endif
+                
                 float4 diffuseCol = _LightColor0 * _DiffuseColor * dotV;
                 
                 o.col = diffuseCol;

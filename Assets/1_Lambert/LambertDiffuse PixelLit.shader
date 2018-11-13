@@ -5,6 +5,8 @@ Shader "Dee/LambertDiffuse PixelLit"
 {
     Properties
     {
+        [Toggle] _HalfLambert ("HalfLambert", Float) = 0
+    
         _DiffuseColor("Diffuse Color", Color) = (1,1,1,1)
     }
     SubShader
@@ -15,6 +17,9 @@ Shader "Dee/LambertDiffuse PixelLit"
         Pass
         {
             CGPROGRAM
+            
+            #pragma shader_feature _HALFLAMBERT_ON
+            
             #pragma vertex vert
             #pragma fragment frag
             
@@ -51,7 +56,14 @@ Shader "Dee/LambertDiffuse PixelLit"
                 float3 normalDir = normalize(worldNormal); 
                 float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
                 
-                float dotV = saturate(dot(lightDir, normalDir));
+                float dotV = dot(lightDir, normalDir);
+                
+                #if _HALFLAMBERT_ON
+                dotV = dotV * 0.5 + 0.5;
+                #else
+                dotV = saturate(dotV);
+                #endif
+                
                 float4 diffuseCol = _LightColor0* _DiffuseColor * dotV;
                 
                 return diffuseCol;
